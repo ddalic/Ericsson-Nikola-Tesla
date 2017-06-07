@@ -60,6 +60,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -129,7 +131,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="DAL\DataAccess.cs" />
+    <Compile Include="Controllers\ImenikController.cs" />
+    <Compile Include="Controllers\OcjenaController.cs" />
+    <Compile Include="Controllers\PredmetController.cs" />
+    <Compile Include="Controllers\UcenikController.cs" />
+    <Compile Include="DAL\cs.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -172,6 +178,26 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Ucenik\Create.cshtml" />
+    <Content Include="Views\Ucenik\Delete.cshtml" />
+    <Content Include="Views\Ucenik\Details.cshtml" />
+    <Content Include="Views\Ucenik\Edit.cshtml" />
+    <Content Include="Views\Ucenik\Index.cshtml" />
+    <Content Include="Views\Predmet\Create.cshtml" />
+    <Content Include="Views\Predmet\Delete.cshtml" />
+    <Content Include="Views\Predmet\Details.cshtml" />
+    <Content Include="Views\Predmet\Edit.cshtml" />
+    <Content Include="Views\Predmet\Index.cshtml" />
+    <Content Include="Views\Ocjena\Create.cshtml" />
+    <Content Include="Views\Ocjena\Delete.cshtml" />
+    <Content Include="Views\Ocjena\Details.cshtml" />
+    <Content Include="Views\Ocjena\Edit.cshtml" />
+    <Content Include="Views\Ocjena\Index.cshtml" />
+    <Content Include="Views\Imenik\Create.cshtml" />
+    <Content Include="Views\Imenik\Delete.cshtml" />
+    <Content Include="Views\Imenik\Details.cshtml" />
+    <Content Include="Views\Imenik\Edit.cshtml" />
+    <Content Include="Views\Imenik\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
