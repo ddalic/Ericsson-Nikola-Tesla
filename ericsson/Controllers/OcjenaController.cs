@@ -18,7 +18,17 @@ namespace ericsson.Controllers
         // GET: Ocjena
         public ActionResult Index()
         {
-            return View(db.Ocjena.ToList());
+            var ocjene = db.Ocjena.ToList();
+            for (int i = 0; i < ocjene.Count; i++)
+            {
+                var ucenikID = ocjene[i].UcenikID;
+                var predmetID = ocjene[i].PredmetID;
+                Ucenik ucenik = db.Ucenik.Where(t => t.UcenikID == ucenikID).Single();
+                ocjene[i].ucenik = ucenik;
+                Predmet predmet = db.Predmet.Where(t => t.PredmetID == predmetID).Single();
+                ocjene[i].predmet = predmet;
+            }
+            return View(ocjene);
         }
 
         // GET: Ocjena/Details/5
@@ -39,6 +49,8 @@ namespace ericsson.Controllers
         // GET: Ocjena/Create
         public ActionResult Create()
         {
+            ViewBag.PredmetList = db.Predmet.ToDictionary(t => t.PredmetID, t => t.ImePredmeta);
+            ViewBag.UcenikList = db.Ucenik.ToDictionary(t => t.UcenikID, t => (t.Ime + " " + t.Prezime));
             return View();
         }
 
@@ -47,7 +59,7 @@ namespace ericsson.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "OcjenaID,Grade,datum,komentar")] Ocjena ocjena)
+        public ActionResult Create([Bind(Include = "OcjenaID,Grade,datum,komentar,PredmetID,UcenikID")] Ocjena ocjena)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +91,7 @@ namespace ericsson.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OcjenaID,Grade,datum,komentar")] Ocjena ocjena)
+        public ActionResult Edit([Bind(Include = "OcjenaID,Grade,datum,komentar,predmet_PredmetID,ucenik_UcenikID")] Ocjena ocjena)
         {
             if (ModelState.IsValid)
             {
@@ -97,7 +109,14 @@ namespace ericsson.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Ocjena ocjena = db.Ocjena.Find(id);
+            var ucenikID = ocjena.UcenikID;
+            var predmetID = ocjena.PredmetID;
+            Ucenik ucenik = db.Ucenik.Where(t => t.UcenikID == ucenikID).Single();
+            ocjena.ucenik = ucenik;
+            Predmet predmet = db.Predmet.Where(t => t.PredmetID == predmetID).Single();
+            ocjena.predmet = predmet;
             if (ocjena == null)
             {
                 return HttpNotFound();
