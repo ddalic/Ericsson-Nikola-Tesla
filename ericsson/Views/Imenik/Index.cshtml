@@ -1,27 +1,75 @@
-﻿@model IEnumerable<ericsson.Models.Imenik>
+﻿@model ericsson.Models.ImenikViewModel
 
-@{
-    ViewBag.Title = "Index";
+
+@{ 
+    ViewBag.Title = Model.Ucenik.ImeIPrezime + " - Imenik";
 }
 
-<h2>Index</h2>
+<h2>Imenik</h2>
+<br />
+<br />
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th></th>
-    </tr>
+<div>
+    @using (Html.BeginForm("Index", "Imenik", new { UcenikID = Model.NextUcenikID }))
+    {
+        @Html.DropDownListFor(t => t.NextUcenikID, new SelectList(ViewBag.UcenikList, "Key", "Value"))
+        <input type="submit" value="Otvori učenika" />
+    }
+</div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ImenikID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ImenikID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ImenikID })
-        </td>
-    </tr>
-}
-
-</table>
+<div class="row">
+    <div class="col-sm-10">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>Učenik</h3>
+            </div>
+            <div class="panel-body">
+                <div class="col-sm-12">
+                    <table class="table borderless">
+                        <tr>
+                            <td>@Html.LabelFor(model => model.Ucenik.Ime) </td>
+                            <td>@Model.Ucenik.Ime</td>
+                            <td>@Html.LabelFor(model => model.Ucenik.Prezime)</td>
+                            <td>@Model.Ucenik.Prezime</td>
+                            <td>@Html.LabelFor(model => model.Ucenik.DatumRodenja)</td>
+                            <td>@Model.Ucenik.DatumRodenja.ToShortDateString()</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.LabelFor(model => model.Ucenik.Adresa)</td>
+                            <td>@Model.Ucenik.Adresa</td>
+                            <td>@Html.LabelFor(model => model.Ucenik.ImeRoditelja)</td>
+                            <td>@Model.Ucenik.ImeRoditelja</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-12">
+                    <h3>Predmeti</h3>
+                    <br />
+                    @foreach(ericsson.Models.Predmet predmet in Model.Ucenik.Predmeti)
+                    {
+                        <h4>@predmet.ImePredmeta</h4>
+                        <table class="table borderless">
+                            <thead>
+                                <tr>
+                                    <th>Ocjena</th>
+                                    <th>Datum</th>
+                                    <th>Komentar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(ericsson.Models.Ocjena ocjena in Model.Ucenik.Ocjene.Where(t => t.PredmetID == predmet.PredmetID).OrderBy(t => t.datum))
+                                {
+                                    <tr>
+                                        <td>@ocjena.Grade</td>
+                                        <td>@ocjena.datum.ToShortDateString()</td>
+                                        <td>@ocjena.komentar</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

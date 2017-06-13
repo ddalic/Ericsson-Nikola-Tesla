@@ -16,105 +16,46 @@ namespace ericsson.Controllers
         private cs db = new cs();
 
         // GET: Imenik
-        public ActionResult Index()
+        public ActionResult Index(int UcenikID = -1)
         {
-            return View(db.Imenik.ToList());
-        }
+            Ucenik ucenik;
+            if (UcenikID == -1) ucenik = db.Ucenik.FirstOrDefault();
+            else ucenik = db.Ucenik.Where(t => t.UcenikID == UcenikID).FirstOrDefault();
 
-        // GET: Imenik/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            if (ucenik == null) return RedirectToAction("Index", "Home");
+
+            ucenik.Predmeti = db.Predmet.OrderBy(t => t.ImePredmeta).ToList();
+            ucenik.Ocjene = db.Ocjena.Where(t => t.UcenikID == ucenik.UcenikID).ToList();
+
+            ViewBag.UcenikList = db.Ucenik.ToDictionary(t => t.UcenikID, t => t.ImeIPrezime);
+            ImenikViewModel model = new ImenikViewModel
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Imenik imenik = db.Imenik.Find(id);
-            if (imenik == null)
-            {
-                return HttpNotFound();
-            }
-            return View(imenik);
+                Ucenik = ucenik,
+                NextUcenikID = ucenik.UcenikID
+            };
+
+            return View(model);
         }
 
-        // GET: Imenik/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Imenik/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ImenikID")] Imenik imenik)
+        public ActionResult Index(ImenikViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                db.Imenik.Add(imenik);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            Ucenik ucenik = db.Ucenik.Where(t => t.UcenikID == model.NextUcenikID).FirstOrDefault();
+            if (ucenik == null) return RedirectToAction("Index", "Home");
 
-            return View(imenik);
+            ucenik.Predmeti = db.Predmet.OrderBy(t => t.ImePredmeta).ToList();
+            ucenik.Ocjene = db.Ocjena.Where(t => t.UcenikID == ucenik.UcenikID).ToList();
+
+            ViewBag.UcenikList = db.Ucenik.ToDictionary(t => t.UcenikID, t => t.ImeIPrezime);
+            ImenikViewModel newmodel = new ImenikViewModel
+            {
+                Ucenik = ucenik,
+                NextUcenikID = ucenik.UcenikID
+            };
+
+            return View(newmodel);
         }
 
-        // GET: Imenik/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Imenik imenik = db.Imenik.Find(id);
-            if (imenik == null)
-            {
-                return HttpNotFound();
-            }
-            return View(imenik);
-        }
-
-        // POST: Imenik/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ImenikID")] Imenik imenik)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(imenik).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(imenik);
-        }
-
-        // GET: Imenik/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Imenik imenik = db.Imenik.Find(id);
-            if (imenik == null)
-            {
-                return HttpNotFound();
-            }
-            return View(imenik);
-        }
-
-        // POST: Imenik/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Imenik imenik = db.Imenik.Find(id);
-            db.Imenik.Remove(imenik);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
 
         protected override void Dispose(bool disposing)
         {

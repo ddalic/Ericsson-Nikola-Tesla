@@ -6,9 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using ericsson.DAL;
-using ericsson.Models;
 using ericsson.DAL.DataAccess;
+using ericsson.Models;
 
 namespace ericsson.Controllers
 {
