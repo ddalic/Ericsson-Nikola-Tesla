@@ -61,11 +61,15 @@ namespace ericsson.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "OcjenaID,Grade,datum,komentar,PredmetID,UcenikID")] Ocjena ocjena)
         {
-            if (ModelState.IsValid)
+            if (ocjena.IsValid())
             {
                 db.Ocjena.Add(ocjena);
                 db.SaveChanges();
                 return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["Pogreska"] = ocjena.ErrorMessage;
             }
 
             return View(ocjena);
@@ -91,7 +95,7 @@ namespace ericsson.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OcjenaID,Grade,datum,komentar,predmet_PredmetID,ucenik_UcenikID")] Ocjena ocjena)
+        public ActionResult Edit([Bind(Include = "OcjenaID,Grade,datum,komentar,PredmetID,UcenikID")] Ocjena ocjena)
         {
             if (ModelState.IsValid)
             {

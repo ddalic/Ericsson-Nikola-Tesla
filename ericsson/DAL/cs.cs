@@ -23,8 +23,6 @@ namespace ericsson.DAL.DataAccess
         public System.Data.Entity.DbSet<ericsson.Models.Ucenik> Ucenik { get; set; }
         public System.Data.Entity.DbSet<ericsson.Models.Ocjena> Ocjena { get; set; }
         public System.Data.Entity.DbSet<ericsson.Models.Predmet> Predmet { get; set; }
-        public System.Data.Entity.DbSet<ericsson.Models.Imenik> Imenik { get; set; }
-
         //singular form
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

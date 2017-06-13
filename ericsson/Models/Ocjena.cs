@@ -28,5 +28,16 @@ namespace ericsson.Models
         public DateTime datum { get; set; }
         [DisplayName("Komentar")]
         public string komentar { get; set; }
+        public virtual bool IsValid()
+        {
+            ErrorMessage = string.Empty;
+
+            if (Grade > 5 || Grade < 1)
+            {
+                ErrorMessage += "Ocijena mora biti između 1 i 5! \n";
+            }
+            return true;
+        }
+        public virtual string ErrorMessage { get; set; }
     }
 }

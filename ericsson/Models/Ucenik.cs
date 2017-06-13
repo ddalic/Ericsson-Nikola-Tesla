@@ -27,5 +27,7 @@ namespace ericsson.Models
             {
                 return Ime + " " + Prezime;
             } }
+        public virtual List<Predmet> Predmeti { get; set; }
+        public virtual List<Ocjena> Ocjene { get; set; }
     }
 }
